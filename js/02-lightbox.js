@@ -1,22 +1,24 @@
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
-console.log(galleryItems);
+const galleryBox = document.querySelector(".gallery");
 
-const galleryContainerEl = document.querySelector(".gallery");
-const imagesMarkup = galleryItems
-    .map(({ preview, original, description }) => {
-        return `<li><a class="gallery__item" href="${original}">
-  <img class="gallery__image" src="${preview}" alt="${description}" />
-</a></li>`;
-    })
-    .join("");
+const createGalleryItem = ({ preview, original, description }) =>
+    `<a class="gallery__item" href="${original}" style="border-radius:16px">
+  <img class="gallery__image" src="${preview}" alt="${description}" title="${description}"/>
+</a>`;
+const galleryMarkup = galleryItems.reduce(
+    (acc, item) => acc + createGalleryItem(item),
+    ""
+);
 
-galleryContainerEl.insertAdjacentHTML("beforeend", imagesMarkup);
-console.log(galleryContainerEl);
-const lightbox = new SimpleLightbox(".gallery a", {
-    captionsData: "alt",
-    captionDelay: 250,
+galleryBox.insertAdjacentHTML("beforeend", galleryMarkup);
+
+galleryBox.addEventListener("click", onGalleryContainer);
+
+function onGalleryContainer(event) {
+    event.preventDefault();
+}
+new SimpleLightbox(".gallery a", {
     enableKeyboard: true,
-    animationSlide: true,
-    animationSpeed: 250,
+    captionDelay: 250,
 });
